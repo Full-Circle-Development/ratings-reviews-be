@@ -13,28 +13,34 @@ pool.on("error", (err, client) => {
   process.exit(-1);
 });
 
-const getReviews = (cb) => {
-  // let id = parseInt(request.params.product_id); // I think this needs to be product_id, not 100% sure though
-
+const getReviews = (cb, id) => {
   pool.query(
-    "SELECT * FROM reviews WHERE product_id = 1",
+    "SELECT * FROM reviews WHERE product_id = $1",
+    [id],
     (error, results) => {
       if (error) {
         throw error;
       }
-      cb(results.rows); // create object here
+      cb({product: `${id}`, results: results.rows}); // create object here
     }
   );
 };
 
-// Demo route
-// const getUserById = (request, response) => {
-//   pool.query("SELECT * FROM reviews WHERE id = $1", [id], (error, results) => {
-//     if (error) {
-//       throw error;
-//     }
-//     response.status(200).json(results.rows);
-//   });
-// };
+const getReviewMeta = (cb, id) => {
+  pool.query(
+    "SELECT * FROM characteristics WHERE product_id = $1",
+    [id],
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      cb({product_id: `${id}`, results: results.rows}); // create object here
+    }
+  );
+};
 
-module.exports = { getReviews }; // add functions here when complete
+
+
+
+
+module.exports = { getReviews, getReviewMeta }; // add functions here when complete
