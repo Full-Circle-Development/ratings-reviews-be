@@ -1,24 +1,26 @@
-const express = require('express')
-const bodyParser = require('body-parser')
-const app = express()
-const port = 4000
+const express = require("express");
+const bodyParser = require("body-parser");
+const app = express();
+const port = 3000;
+const db = require('./queries');
 
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 app.use(
-    bodyParser.urlencoded({
-        extended: true
-    })
-)
+  bodyParser.urlencoded({
+    extended: true,
+  })
+);
 
 app.get('/', (request, response) => {
-    response.json({ info: 'Node.js, Express, and Postgres API' })
-  })
+    // console.log(request.params)
+  db.getReviews((results) => (response.status(200).json(results)))
+});
+
+// need post route
+
+// need put route
 
 app.listen(port, () => {
-    console.log(`App running on port ${port}.`)
-  })
+  console.log(`App running on port ${port}.`);
+});
 
-
-app.get('/', (req, res) => res.send('Hello World!'))
-
-app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))

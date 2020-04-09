@@ -1,27 +1,40 @@
-const Pool = require('pg').Pool
+const Pool = require("pg").Pool;
 
 const pool = new Pool({
-  user: 'me',
-  host: 'localhost',
-  database: 'reviewsdb',
-  password: 'password',
-  port: 5432
+  user: "austin",
+  host: "localhost",
+  database: "reviewsdb",
+  password: "123",
+  port: 5432, // may need to change this when deployed
 });
 
-const getUsers = (request, response) => {
-  pool.query('SELECT * FROM reviews', (error, results) => {
-    if (error) {
-      throw error
-    }
-    response.status(200).json(results.rows)
-  })
-}
+pool.on("error", (err, client) => {
+  console.error("Unexpected error on idle client", err);
+  process.exit(-1);
+});
 
-const getUserById = (request, response) => {
-  pool.query('SELECT * FROM reviews WHERE id = $1', [id], (error, results) => {
-    if (error) {
-      throw error
+const getReviews = (cb) => {
+  // let id = parseInt(request.params.product_id); // I think this needs to be product_id, not 100% sure though
+
+  pool.query(
+    "SELECT * FROM reviews WHERE product_id = 1",
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      cb(results.rows); // create object here
     }
-    response.status(200).json(results.rows)
-  })
-}
+  );
+};
+
+// Demo route
+// const getUserById = (request, response) => {
+//   pool.query("SELECT * FROM reviews WHERE id = $1", [id], (error, results) => {
+//     if (error) {
+//       throw error;
+//     }
+//     response.status(200).json(results.rows);
+//   });
+// };
+
+module.exports = { getReviews }; // add functions here when complete
