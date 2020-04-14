@@ -3,3 +3,10 @@
 
 # Ignore all csv files
 *.csv
+
+# Ignore all .env files
+*.env
+
+node_modules
+
+package-lock.json

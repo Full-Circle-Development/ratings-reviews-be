@@ -5,7 +5,7 @@ CREATE DATABASE reviewsdb;
 \c reviewsdb;
   
   CREATE TABLE reviews (
-      id SERIAL UNIQUE,
+      id SERIAL UNIQUE PRIMARY KEY NOT NULL,
       product_id INTEGER,
       rating INTEGER,
       date DATE NOT NULL,
@@ -13,8 +13,8 @@ CREATE DATABASE reviewsdb;
       body TEXT,
       recommend BOOLEAN,
       reported BOOLEAN, 
-      reviewer_name VARCHAR NOT NULL,
-      reviewer_email VARCHAR NOT NULL,
+      reviewer_name TEXT NOT NULL,
+      reviewer_email TEXT NOT NULL,
       response TEXT,
       helpfulness INTEGER
   );
@@ -24,9 +24,9 @@ CREATE DATABASE reviewsdb;
   */
 
   CREATE TABLE reviews_photos (
-      id SERIAL,
-      review_id INTEGER references reviews(id),
-      url VARCHAR
+      id SERIAL PRIMARY KEY,
+      review_id INTEGER REFERENCES reviews(id),
+      url TEXT
   );
   /* 
     From legacy data: id,review_id,url
@@ -35,9 +35,9 @@ CREATE DATABASE reviewsdb;
 
 
   CREATE TABLE characteristics ( 
-      id SERIAL UNIQUE,
+      id SERIAL UNIQUE PRIMARY KEY,
       product_id INTEGER,
-      name VARCHAR
+      name TEXT
   );
   /*
     From legacy data: id,product_id,name
@@ -46,8 +46,8 @@ CREATE DATABASE reviewsdb;
 
 
   CREATE TABLE characteristics_reviews (
-      id SERIAL,
-      characteristic_id INTEGER references characteristics(id),
+      id SERIAL PRIMARY KEY,
+      characteristic_id INTEGER REFERENCES characteristics(id),
       review_id INTEGER references reviews(id),
       value INTEGER
   );
