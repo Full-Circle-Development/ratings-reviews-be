@@ -1,12 +1,13 @@
 const Pool = require("pg").Pool;
 require('dotenv').config();
+require('newrelic');
 
 const pool = new Pool({
-  user: "austin",
-  host: "localhost",
-  database: "reviewsdb",
-  password: "123",
-  port: 5432, // may need to change this when deployed
+  user: process.env.POOL_USER,
+  host: process.env.POOL_HOST,
+  database: process.env.POOL_DATABASE,
+  password: process.env.POOL_PASSWORD,
+  port: process.env.POOL_PORT, // may need to change this when deployed
 });
 
 pool.on("error", (err, client) => {
@@ -14,21 +15,7 @@ pool.on("error", (err, client) => {
   process.exit(-1);
 });
 
-// id SERIAL UNIQUE PRIMARY KEY,
-// product_id INTEGER,
-// rating INTEGER,
-// date DATE NOT NULL,
-// summary TEXT,
-// body TEXT,
-// recommend BOOLEAN,
-// reported BOOLEAN,
-// reviewer_name VARCHAR NOT NULL,
-// reviewer_email VARCHAR NOT NULL,
-// response TEXT,
-// helpfulness INTEGER
 
-// SELECT * FROM reviews LEFT JOIN reviews_photos ON reviews.id = reviews_photos.review_id WHERE product_id = $1
-// SELECT product_id, rating, date, summary, body, recommend, reported, reviewer_name, reviewer_email, response, helpfulness FROM reviews LEFT JOIN reviews_photos ON reviews.id = reviews_photos.review_id WHERE product_id = 2;
 const getReviews = (id, request, response) => {
   pool
     .query(
@@ -47,19 +34,6 @@ const getReviews = (id, request, response) => {
     .then((reviews) => response.send({ product: `${id}`, count: reviews.length, results: reviews }))
     .catch((error) => console.log(error));
 };
-
-// const getReviews = (cb, id) => {
-//   pool.query(
-//     "SELECT * FROM reviews FULL OUTER JOIN reviews_photos on reviews_photos.review_id = reviews.id WHERE product_id = $1",
-//     [id],
-//     (error, results) => {
-//       if (error) {
-//         throw error;
-//       }
-//       cb({ product: `${id}`, results: results.rows }); // create object here
-//     }
-//   );
-// };
 
 // SELECT * FROM reviews INNER JOIN reviews_photos ON reviews_photos.review_id = reviews.review_id WHERE product_id = x
 

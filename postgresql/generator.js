@@ -11,7 +11,7 @@ function generate(num) {
 
     string += 
     rowId + ', ' +  // id
-    faker.random.number({'min': 1,'max': 10000}) + ', ' +  // product_id
+    faker.random.number({'min': 1,'max': 5000000}) + ', ' +  // product_id
     faker.random.number({'min': 1,'max': 5}) + ', ' +  // rating
     faker.date.past().toISOString()  + ', ' + // date
     faker.lorem.sentence() + ', ' + // summary

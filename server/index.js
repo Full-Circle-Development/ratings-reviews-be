@@ -4,6 +4,7 @@ const app = express();
 const compression = require("compression");
 const port = 3000;
 const db = require("./queries");
+require('newrelic');
 
 app.use(bodyParser.json());
 app.use(compression());
@@ -18,12 +19,6 @@ app.get("/:id/list", (request, response) => {
   let productId = request.params.id;
   db.getReviews(productId, request, response)
 });
-
-// // Get review list
-// app.get("/:id/list", (request, response) => {
-//     let productId = request.params.id;
-//     db.getReviews((results) => response.status(200).json(results), productId);
-//   });
 
 // Get review meta data
 app.get("/reviews/:product_id/meta", (request, response) => {
