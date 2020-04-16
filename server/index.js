@@ -4,8 +4,10 @@ const app = express();
 const compression = require("compression");
 const port = 3000;
 const db = require("./queries");
+var cors = require('cors')
 require('newrelic');
 
+app.use(cors())
 app.use(bodyParser.json());
 app.use(compression());
 app.use(
